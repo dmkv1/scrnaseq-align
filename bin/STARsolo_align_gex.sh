@@ -47,7 +47,7 @@ STAR \
     --soloUMIfiltering MultiGeneUMI_CR \
     --soloCellFilter None \
     --outFilterScoreMin 30 \
-    --soloFeatures Gene GeneFull Velocyto \
+    --soloFeatures Gene GeneFull \
     --soloMultiMappers EM \
     --outMultimapperOrder Random \
     --outFilterMultimapNmax 10 \
