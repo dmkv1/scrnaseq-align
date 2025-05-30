@@ -30,8 +30,9 @@ process STARSOLO_ALIGN {
     path(sjdbGTFfile)
     
     script:
+    def bamSortRAM = (params.STAR.sortbam_memory_gb * 1024L * 1024L * 1024L) as Long
     """
-    STARsolo_align_gex.sh ${params.STAR.threads} \
+    STARsolo_align_gex.sh ${params.STAR.threads} ${bamSortRAM} \
         ${sample_id} ${gex_fq1} ${gex_fq2} \
         ${whitelist} ${genome} ${sjdbGTFfile} \
         ${params.STAR.cell_barcode_length} ${params.STAR.umi_length} ${params.STAR.soloStrand} 

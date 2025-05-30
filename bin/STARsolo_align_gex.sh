@@ -6,26 +6,27 @@ ulimit -n 65536
 
 THREADS=$1
 THREADS=$((THREADS))
+BAM_SORT_RAM=$2
 
-SAMPLE=$2
-R1=$3
-R2=$4
+SAMPLE=$3
+R1=$4
+R2=$5
 
-CBWHITELIST=$5
-GENOME=$6
-SJDBGTF=$7
+CBWHITELIST=$6
+GENOME=$7
+SJDBGTF=$8
 
-CBLEN=$8
-UMILEN=$9
+CBLEN=$9
+UMILEN=${10}
 # Convert to integers
 CBLEN=$((CBLEN))
 UMILEN=$((UMILEN))
 
-SOLO_STRAND=${10}
+SOLO_STRAND=${11}
 
 STAR \
     --genomeLoad NoSharedMemory \
-    --limitBAMsortRAM 128000000000 \
+    --limitBAMsortRAM $BAM_SORT_RAM \
     --runThreadN $THREADS \
     --genomeDir $GENOME \
     --sjdbGTFfile $SJDBGTF \
