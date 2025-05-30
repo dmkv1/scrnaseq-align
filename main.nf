@@ -6,10 +6,15 @@ include { STARSOLO_INDEX } from './modules/alignment'
 include { STARSOLO_ALIGN } from './modules/alignment'
 
 workflow {
-    STARSOLO_INDEX(
-        params.STAR.genomeFastaFiles,
-        params.STAR.sjdbGTFfile,
-    )
+    if (params.STAR.use_prebuilt_index) {
+        ch_genome = Channel.fromPath(params.STAR.genome_index, type: 'dir', checkIfExists: true)
+    } else {
+        STARSOLO_INDEX(
+            params.STAR.genomeFastaFiles,
+            params.STAR.sjdbGTFfile,
+        )
+        ch_genome = STARSOLO_INDEX.out.genome
+    }
 
     ch_samples_gex = Channel.fromPath(params.samples, checkIfExists: true)
         .splitCsv(header: true)
@@ -24,7 +29,7 @@ workflow {
     STARSOLO_ALIGN(
         ch_samples_gex,
         params.STAR.whitelist,
-        STARSOLO_INDEX.out.genome,
+        ch_genome,
         params.STAR.sjdbGTFfile,
     )
 }
