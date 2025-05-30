@@ -11,7 +11,7 @@ process STARSOLO_INDEX {
     script:
     """
     STAR \
-     --runThreadN ${params.STAR.threads} \
+     --runThreadN ${params.STAR.index_threads} \
      --runMode genomeGenerate \
      --genomeDir "STAR_genome_indexed" \
      --genomeFastaFiles "${genomeFastaFile}" \
@@ -32,7 +32,7 @@ process STARSOLO_ALIGN {
     script:
     def bamSortRAM = (params.STAR.sortbam_memory_gb * 1024L * 1024L * 1024L) as Long
     """
-    STARsolo_align_gex.sh ${params.STAR.threads} ${bamSortRAM} \
+    STARsolo_align_gex.sh ${params.STAR.align_threads} ${bamSortRAM} \
         ${sample_id} ${gex_fq1} ${gex_fq2} \
         ${whitelist} ${genome} ${sjdbGTFfile} \
         ${params.STAR.cell_barcode_length} ${params.STAR.umi_length} ${params.STAR.soloStrand} 
