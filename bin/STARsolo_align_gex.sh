@@ -34,7 +34,6 @@ STAR \
     --soloBarcodeMate 1 \
     --clip5pNbases 39 0 \
     --soloType CB_UMI_Simple \
-    --clipAdapterType CellRanger4 \
     --soloCBwhitelist $CBWHITELIST \
     --soloCBstart 1 \
     --soloCBlen $CBLEN \

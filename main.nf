@@ -14,9 +14,9 @@ workflow {
     ch_samples_gex = Channel.fromPath(params.samples, checkIfExists: true)
         .splitCsv(header: true)
         .map { row ->
-            def sample_id = row.sample
+            def sample_id = row.sample_id
             def gex_fq1 = file(row.gex_fq1)
-            def gex_fq2 = file(row.gex_fq1)
+            def gex_fq2 = file(row.gex_fq2)
 
             return [sample_id, gex_fq1, gex_fq2]
         }
