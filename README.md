@@ -14,7 +14,7 @@ sjdbOverhang = 149
 
 Note that `genes.gtf` must be ungzipped before using it.
 
-### Alinglemt process
+### Alingment process
 
 Inputs are defined in `samples.csv`. Its columns:
 
