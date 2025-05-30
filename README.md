@@ -8,7 +8,7 @@ Inputs are defined in `nextflow.config`:
 
 ```conf
 genomeFastaFiles = "path/to/refdata-gex-GRCh38-2024-A/fasta/genome.fa"
-sjdbGTFfile = "path/to//refdata-gex-GRCh38-2024-A/genes/genes.gtf"
+sjdbGTFfile = "path/to/refdata-gex-GRCh38-2024-A/genes/genes.gtf"
 sjdbOverhang = 149
 ```
 
