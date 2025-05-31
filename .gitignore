@@ -3,6 +3,7 @@
 .nextflow.pid
 *nextflow.log*
 work/
+reference/
 results/
 
 # 

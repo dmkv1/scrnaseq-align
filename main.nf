@@ -4,8 +4,8 @@ nextflow.enable.dsl = 2
 
 include { STARSOLO_INDEX } from './modules/alignment'
 include { STARSOLO_ALIGN } from './modules/alignment'
-include { CELLRANGER_VDJ as CELLRANGER_VDJ_B } from './modules/alignment'
-include { CELLRANGER_VDJ as CELLRANGER_VDJ_T } from './modules/alignment'
+include { CELLRANGER_VDJ_B } from './modules/alignment'
+include { CELLRANGER_VDJ_T } from './modules/alignment'
 
 workflow {
     if (params.STAR.use_prebuilt_index) {
@@ -54,7 +54,7 @@ workflow {
 
     CELLRANGER_VDJ_B(
         ch_samples_vdj_b,
-        params.cellranger.cellranger_vdj_reference,
+        params.cellranger.cellranger_vdj_reference
     )
 
     ch_samples_vdj_t = Channel.fromPath(params.samples, checkIfExists: true)

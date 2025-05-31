@@ -1,10 +1,24 @@
 # Pipeline for alignment of 5' scRNAseq samples
 
+## Inputs
+
+Inputs are defined in `samples.csv`.
+
+```
+sample_id,gex_fq1,gex_fq2,vdj_b_fq1,vdj_b_fq2,vdj_t_fq1,vdj_t_fq2
+sample1,path/to/S1_GEX_R1.fastq.gz,path/to/S1_GEX_R2.fastq.gz,path/to/S1_BCR_R1.fastq.gz,path/to/S1_BCR_R2.fastq.gz,path/to/S1_TCR_R1.fastq.gz,path/to/S1_TCR_R2.fastq.gz
+sample2,path/to/S2_GEX_R1.fastq.gz,path/to/S2_GEX_R2.fastq.gz,path/to/S2_BCR_R1.fastq.gz,path/to/S2_BCR_R2.fastq.gz,,
+sample3,path/to/S3_GEX_R1.fastq.gz,path/to/S3_GEX_R2.fastq.gz,,path/to/S3_BCR_R2.fastq.gz,path/to/S1_TCR_R1.fastq.gz,path/to/S3_TCR_R2.fastq.gz
+sample4,path/to/S4_GEX_R1.fastq.gz,path/to/S4_GEX_R2.fastq.gz,,,,
+```
+
+Absent TCR and BCR FASTQs would not affect the pipeline. Gene expression FASTQs must be present for each sample.
+
 ## Gene expression alingment and count - STARsolo
 
 ### Genome indexing
 
-Inputs are defined in `nextflow.config`:
+Reference file inputs are defined in the STAR section of `params` in `nextflow.config`:
 
 ```conf
 genomeFastaFiles = "path/to/refdata-gex-GRCh38-2024-A/fasta/genome.fa"
@@ -14,13 +28,67 @@ sjdbOverhang = 149
 
 Note that `genes.gtf` must be ungzipped before using it.
 
-### Alingment process
+Optionally, a pre-indexed genome can be used:
 
-Inputs are defined in `samples.csv`. Its columns:
+```conf
+STAR {
+    use_prebuilt_index = true
+    genome_index = 'path/to/index_directory'
+    ...
+```
 
+### Alignment process
+
+Second part of the STAR section of `params` specifies barcode whitelist and 10X chemistry used in the experiment.
+
+Parameters for 5' v2:
+
+```conf
+whitelist = 'path/to/737K-august-2016.txt'
+cell_barcode_length = 16
+umi_length = 10
+soloStrand = 'Forward'
 ```
-sample_id,gex_fq1,gex_fq2
+
+STAR call itself is in `bin/STARsolo_align_gex.sh`:
+
+```bash
+STAR \
+    --genomeLoad NoSharedMemory \
+    --genomeDir $GENOME \
+    --sjdbGTFfile $SJDBGTF \
+    --readFilesIn $R1 $R2 \
+    --readFilesCommand zcat \
+    --soloBarcodeMate 1 \
+    --clip5pNbases 39 0 \
+    --soloType CB_UMI_Simple \
+    --soloCBwhitelist $CBWHITELIST \
+    --soloCBstart 1 \
+    --soloCBlen $CBLEN \
+    --soloUMIstart $((CBLEN+1)) \
+    --soloUMIlen $UMILEN \
+    --soloStrand $SOLO_STRAND \
+    --soloBarcodeReadLength 0 \
+    --soloUMIdedup 1MM_CR \
+    --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \
+    --soloUMIfiltering MultiGeneUMI_CR \
+    --soloCellFilter None \
+    --outFilterScoreMin 30 \
+    --soloFeatures Gene GeneFull \
+    --soloMultiMappers EM \
+    --outMultimapperOrder Random \
+    --outFilterMultimapNmax 10 \
+    --outSAMmultNmax 1 \
+    --outSAMattributes NH HI AS nM CR CY UR UY GX GN CB UB \
+    --outFilterType BySJout \
+    --outSAMtype BAM SortedByCoordinate \
+    --outSAMunmapped Within \
+    --outReadsUnmapped Fastx
 ```
+
+It includes R1 clipping and multimapping.
 
 ## VDJ alingment and count - cellranger
+
+todo: FASTQ renaming for cellranger
 
