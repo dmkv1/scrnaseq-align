@@ -1,7 +1,8 @@
 # nextflow
 .nextflow/
 .nextflow.pid
-*nextflow.log*
+.nextflow.log*
+run.log
 work/
 reference/
 results/
