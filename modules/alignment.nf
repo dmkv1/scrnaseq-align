@@ -41,7 +41,11 @@ process STARSOLO_ALIGN {
     STARsolo_align_gex.sh ${task.cpus} ${bamSortRAM} \
         ${sample_id} ${gex_fq1} ${gex_fq2} \
         ${whitelist} ${genome} ${sjdbGTFfile} \
-        ${params.STAR.cell_barcode_length} ${params.STAR.umi_length} ${params.STAR.soloStrand} 
+        ${params.STAR.cell_barcode_length} ${params.STAR.umi_length} ${params.STAR.soloStrand}
+
+    # Gzip all STARsolo outputs
+    gzip Solo.out/Gene/raw/*
+    gzip Solo.out/GeneFull/raw/*
     """
 }
 
@@ -58,6 +62,9 @@ process CELLRANGER_VDJ_B {
 
     script:
     """
+    mv -v ${fq1} ${sample_id}_S1_L001_R1_001.fastq.gz
+    mv -v ${fq2} ${sample_id}_S1_L001_R2_001.fastq.gz
+
     cellranger vdj --id=${sample_id} \
          --reference=${params.cellranger.cellranger_vdj_reference} \
          --fastqs=.
@@ -77,6 +84,9 @@ process CELLRANGER_VDJ_T {
 
     script:
     """
+    mv -v ${fq1} ${sample_id}_S1_L001_R1_001.fastq.gz
+    mv -v ${fq2} ${sample_id}_S1_L001_R2_001.fastq.gz
+    
     cellranger vdj --id=${sample_id} \
          --reference=${params.cellranger.cellranger_vdj_reference} \
          --fastqs=.

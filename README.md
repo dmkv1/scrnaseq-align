@@ -12,7 +12,7 @@ sample3,path/to/S3_GEX_R1.fastq.gz,path/to/S3_GEX_R2.fastq.gz,,path/to/S3_BCR_R2
 sample4,path/to/S4_GEX_R1.fastq.gz,path/to/S4_GEX_R2.fastq.gz,,,,
 ```
 
-Absent TCR and BCR FASTQs would not affect the pipeline. Gene expression FASTQs must be present for each sample.
+Absent TCR and BCR FASTQs would not affect the sample queue. However, gene expression FASTQs must be present for each sample.
 
 ## Gene expression alignment and count - STARsolo
 
@@ -28,7 +28,7 @@ sjdbOverhang = 149
 
 Note that `genes.gtf` must be ungzipped before using it.
 
-Optionally, a pre-indexed genome can be used:
+Optionally, a STAR-pre-indexed genome can be used:
 
 ```conf
 STAR {
@@ -41,7 +41,7 @@ STAR {
 
 Second part of the STAR section of `params` specifies barcode whitelist and 10X chemistry used in the experiment.
 
-Parameters for 5' v2:
+Parameters specific for Chromium Next GEM 5’ v2 protocol:
 
 ```conf
 whitelist = 'path/to/737K-august-2016.txt'
@@ -50,7 +50,7 @@ umi_length = 10
 soloStrand = 'Forward'
 ```
 
-More STAR parameters are in the STAR invocation in `bin/STARsolo_align_gex.sh`:
+More STAR parameters are listed in the STAR invocation script `bin/STARsolo_align_gex.sh`:
 
 ```bash
 STAR \
@@ -59,36 +59,51 @@ STAR \
     --sjdbGTFfile $SJDBGTF \
     --readFilesIn $R1 $R2 \
     --readFilesCommand zcat \
-    --soloBarcodeMate 1 \
-    --clip5pNbases 39 0 \
-    --soloType CB_UMI_Simple \
     --soloCBwhitelist $CBWHITELIST \
+    --soloType CB_UMI_Simple \
+    --soloStrand $SOLO_STRAND \
     --soloCBstart 1 \
     --soloCBlen $CBLEN \
     --soloUMIstart $((CBLEN+1)) \
     --soloUMIlen $UMILEN \
-    --soloStrand $SOLO_STRAND \
+    --soloBarcodeMate 1 \
     --soloBarcodeReadLength 0 \
-    --soloUMIdedup 1MM_CR \
+    --clip5pNbases 39 0 \
     --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \
+    --soloUMIdedup 1MM_CR \
     --soloUMIfiltering MultiGeneUMI_CR \
-    --soloCellFilter None \
-    --outFilterScoreMin 30 \
-    --soloFeatures Gene GeneFull \
     --soloMultiMappers EM \
-    --outMultimapperOrder Random \
     --outFilterMultimapNmax 10 \
+    --outMultimapperOrder Random \
+    --soloFeatures Gene GeneFull \
+    --soloCellFilter None \
+    --outFilterType BySJout \
+    --outFilterScoreMin 30 \
     --outSAMmultNmax 1 \
     --outSAMattributes NH HI AS nM CR CY UR UY GX GN CB UB \
-    --outFilterType BySJout \
     --outSAMtype BAM SortedByCoordinate \
     --outSAMunmapped Within \
     --outReadsUnmapped Fastx
 ```
 
-It includes R1 clipping and multimapping.
+
 
 ## VDJ alignment and count - cellranger
 
-todo: FASTQ renaming for cellranger
+`cellranger vdj` call is very simple:
 
+```groovy
+script:
+    """
+    mv -v ${fq1} ${sample_id}_S1_L001_R1_001.fastq.gz
+    mv -v ${fq2} ${sample_id}_S1_L001_R2_001.fastq.gz
+    
+    cellranger vdj --id=${sample_id} \
+         --reference=${params.cellranger.cellranger_vdj_reference} \
+         --fastqs=.
+    """
+```
+
+## Acknowledgements
+
+todo
