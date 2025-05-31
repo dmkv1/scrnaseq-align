@@ -1,2 +1,2 @@
-sample_id,gex_fq1,gex_fq2
-CNS01,/mnt/data/NGS/Projects/CNS-scrnaseq/fastq/CNS_01/GEX/CNS_01_G_S1_L001_R1_001.fastq.gz,/mnt/data/NGS/Projects/CNS-scrnaseq/fastq/CNS_01/GEX/CNS_01_G_S1_L001_R2_001.fastq.gz
+sample_id,gex_fq1,gex_fq2,vdj_b_fq1,vdj_b_fq2,vdj_t_fq1,vdj_t_fq2
+CNS01,/mnt/data/NGS/Projects/CNS-scrnaseq/fastq/CNS_01/GEX/CNS_01_G_S1_L001_R1_001.fastq.gz,/mnt/data/NGS/Projects/CNS-scrnaseq/fastq/CNS_01/GEX/CNS_01_G_S1_L001_R2_001.fastq.gz,/mnt/data/NGS/Projects/CNS-scrnaseq/fastq/CNS_01/VDJ_B/CNS_01_B_S1_L001_R1_001.fastq.gz,/mnt/data/NGS/Projects/CNS-scrnaseq/fastq/CNS_01/VDJ_B/CNS_01_B_S1_L001_R2_001.fastq.gz,,

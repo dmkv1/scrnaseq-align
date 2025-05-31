@@ -4,6 +4,8 @@ nextflow.enable.dsl = 2
 
 include { STARSOLO_INDEX } from './modules/alignment'
 include { STARSOLO_ALIGN } from './modules/alignment'
+include { CELLRANGER_VDJ as CELLRANGER_VDJ_B } from './modules/alignment'
+include { CELLRANGER_VDJ as CELLRANGER_VDJ_T } from './modules/alignment'
 
 workflow {
     if (params.STAR.use_prebuilt_index) {
@@ -31,5 +33,20 @@ workflow {
         params.STAR.whitelist,
         ch_genome,
         params.STAR.sjdbGTFfile,
+    )
+
+    ch_samples_vdj_b = Channel.fromPath(params.samples, checkIfExists: true)
+        .splitCsv(header: true)
+        .map { row ->
+            def sample_id = row.sample_id
+            def fq1 = file(row.vdj_b_fq1)
+            def fq2 = file(row.vdj_b_fq2)
+
+            return [sample_id, fq1, fq2]
+        }
+
+    CELLRANGER_VDJ_B(
+        ch_samples_vdj_b,
+        params.cellranger.cellranger_vdj_reference
     )
 }
