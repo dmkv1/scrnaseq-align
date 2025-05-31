@@ -104,6 +104,16 @@ script:
     """
 ```
 
+The VDJ reference directory is specified in the cellranger part of config:
+
+```conf
+cellranger {
+        cellranger_vdj_reference = '/path/to/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0'
+    }
+```
+
+The fastq files (more specifically, their staged symlinks) will get renamed automatically before feeding them to cellranger.
+
 ## Acknowledgements
 
 todo
