@@ -14,7 +14,7 @@ sample4,path/to/S4_GEX_R1.fastq.gz,path/to/S4_GEX_R2.fastq.gz,,,,
 
 Absent TCR and BCR FASTQs would not affect the pipeline. Gene expression FASTQs must be present for each sample.
 
-## Gene expression alingment and count - STARsolo
+## Gene expression alignment and count - STARsolo
 
 ### Genome indexing
 
@@ -50,7 +50,7 @@ umi_length = 10
 soloStrand = 'Forward'
 ```
 
-STAR call itself is in `bin/STARsolo_align_gex.sh`:
+More STAR parameters are in the STAR invocation in `bin/STARsolo_align_gex.sh`:
 
 ```bash
 STAR \
@@ -88,7 +88,7 @@ STAR \
 
 It includes R1 clipping and multimapping.
 
-## VDJ alingment and count - cellranger
+## VDJ alignment and count - cellranger
 
 todo: FASTQ renaming for cellranger
 
