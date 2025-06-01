@@ -6,5 +6,3 @@ nextflow run main.nf \
   --outdir results \
   -resume \
   -bg > run.log 2>&1
-
-echo -e "\n All done!" >> run.log

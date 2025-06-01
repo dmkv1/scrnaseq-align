@@ -61,13 +61,16 @@ process CELLRANGER_VDJ_B {
     path "${sample_id}/outs/", emit: vdj_b
 
     script:
+    def local_mem_gb = task.memory.toGiga()
     """
     mv -v ${fq1} ${sample_id}_S1_L001_R1_001.fastq.gz
     mv -v ${fq2} ${sample_id}_S1_L001_R2_001.fastq.gz
 
     cellranger vdj --id=${sample_id} \
          --reference=${params.cellranger.cellranger_vdj_reference} \
-         --fastqs=.
+         --fastqs=. \
+         --localcores ${task.cpus} \
+         --localmem ${local_mem_gb}
     """
 }
 
@@ -83,12 +86,15 @@ process CELLRANGER_VDJ_T {
     path "${sample_id}/outs/", emit: vdj_t
 
     script:
+    def local_mem_gb = task.memory.toGiga()
     """
     mv -v ${fq1} ${sample_id}_S1_L001_R1_001.fastq.gz
     mv -v ${fq2} ${sample_id}_S1_L001_R2_001.fastq.gz
     
     cellranger vdj --id=${sample_id} \
          --reference=${params.cellranger.cellranger_vdj_reference} \
-         --fastqs=.
+         --fastqs=. \
+         --localcores ${task.cpus} \
+         --localmem ${local_mem_gb}
     """
 }
