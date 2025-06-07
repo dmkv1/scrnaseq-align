@@ -45,7 +45,7 @@ workflow {
 
             return [sample_id, fq1, fq2]
         }
-        .filter { sample_id, fq1, fq2 -> 
+        .filter { _sample_id, fq1, fq2 -> 
             fq1 && fq2 && fq1.trim() != '' && fq2.trim() != ''
         }
         .map { sample_id, fq1, fq2 ->
@@ -66,7 +66,7 @@ workflow {
 
             return [sample_id, fq1, fq2]
         }
-        .filter { sample_id, fq1, fq2 -> 
+        .filter { _sample_id, fq1, fq2 -> 
             fq1 && fq2 && fq1.trim() != '' && fq2.trim() != ''
         }
         .map { sample_id, fq1, fq2 ->
