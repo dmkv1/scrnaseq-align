@@ -70,7 +70,8 @@ process CELLRANGER_VDJ_B {
          --reference=${params.cellranger.cellranger_vdj_reference} \
          --fastqs=. \
          --localcores ${task.cpus} \
-         --localmem ${local_mem_gb}
+         --localmem ${local_mem_gb} \
+         --chain IG
     """
 }
 
@@ -95,6 +96,7 @@ process CELLRANGER_VDJ_T {
          --reference=${params.cellranger.cellranger_vdj_reference} \
          --fastqs=. \
          --localcores ${task.cpus} \
-         --localmem ${local_mem_gb}
+         --localmem ${local_mem_gb} \
+         --chain TR
     """
 }
